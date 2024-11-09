@@ -1,1 +1,27 @@
+name: HTML Linting
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint-html:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install htmlhint
+      run: npm install -g htmlhint
+
+    - name: Run HTML Lint
+      run: htmlhint '**/*.html'
 
