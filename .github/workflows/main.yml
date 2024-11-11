@@ -19,10 +19,10 @@ jobs:
           python3 -m pip install flake8
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-      - name: Run JavaScript Linter
+      - name: Run HTML Linter
         run: |
-          npm install eslint
-          npx eslint .
+          npm install -g htmlhint
+          htmlhint "**/*.html"  # Lint all HTML files in the repo
 
       - name: Notify on Failure
         if: ${{ failure() }}
