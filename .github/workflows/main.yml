@@ -4,24 +4,26 @@ on:
   push:
     branches:
       - main
-  pull_request:
+      - '**'
 
 jobs:
-  lint-html:
+  lint:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+      - name: Run Python Linter
+        if: contains(github.event.head_commit.message, '[skip lint]') == false # Optional: skip lint if commit contains [skip lint]
+        run: |
+          python3 -m pip install flake8
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-    - name: Install htmlhint
-      run: npm install -g htmlhint
+      - name: Run JavaScript Linter
+        run: |
+          npm install eslint
+          npx eslint .
 
-    - name: Run HTML Lint
-      run: htmlhint '**/*.html'
-
+      - name: Notify on Failure
+        if: ${{ failure() }}
+        run: echo "Error; Linting failed! Please check the code for syntax issues."
