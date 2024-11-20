@@ -28,5 +28,5 @@ jobs:
 
         ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
           cd /var/www/html
-          sudo systemctl restart httpd 
+          sudo service httpd restart 
         EOF        
